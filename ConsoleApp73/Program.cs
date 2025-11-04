@@ -39,7 +39,23 @@ namespace ConsoleApp73
                         DeleteTask();
                         break;
                     case "5":
-                        //save / load from file
+                        Console.WriteLine("1. Save tasks");
+                        Console.WriteLine("2. Load tasks");
+                        string saveOrLoad = Console.ReadLine();
+
+                        if (saveOrLoad == "1")
+                        {
+                            SaveTasks();
+                        }
+                        else if (saveOrLoad == "2")
+                        {
+                            //load tasks
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid option.");
+                        }
+
                         break;
                     case "6":
                         Console.WriteLine("Goodbye!");
@@ -132,6 +148,13 @@ namespace ConsoleApp73
                 Console.WriteLine("Task deleted successfully!");
                 tasks.RemoveAt(deletedTask - 1);
             }
+        }
+
+        static void SaveTasks()
+        {
+            string json = JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true});
+            File.WriteAllText("tasks.json", json);
+            Console.WriteLine("Tasks saved to a file!");
         }
 
         class TaskItem
