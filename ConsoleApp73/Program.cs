@@ -49,7 +49,7 @@ namespace ConsoleApp73
                         }
                         else if (saveOrLoad == "2")
                         {
-                            //load tasks
+                            LoadTasks();
                         }
                         else
                         {
@@ -140,7 +140,7 @@ namespace ConsoleApp73
             Console.Write("Task you want to delete: ");
             int deletedTask = Convert.ToInt32(Console.ReadLine());
 
-            if (tasks.Count > deletedTask)
+            if (tasks.Count < deletedTask || deletedTask < 1)
             {
                 Console.WriteLine("Invalid task number.");
             }
@@ -155,6 +155,31 @@ namespace ConsoleApp73
             string json = JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true});
             File.WriteAllText("tasks.json", json);
             Console.WriteLine("Tasks saved to a file!");
+        }
+
+        static void LoadTasks()
+        {
+            
+            if(File.Exists("tasks.json"))
+            {
+                string json = File.ReadAllText("tasks.json");
+
+                List<TaskItem> loadedTasks = JsonSerializer.Deserialize<List<TaskItem>>(json);
+
+                if(loadedTasks != null)
+                {
+                    tasks = loadedTasks;
+                    Console.WriteLine("Tasks loaded successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("File is empty or corrupted.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No save file found!");
+            }
         }
 
         class TaskItem
